@@ -2,6 +2,7 @@ from domain.entrances_model import entrances
 from domain.walk_profiles_model import walk_profiles
 from domain.detours_model import detours
 from domain.map_notes_model import map_notes
+from domain.trials_model import trial_entries, weight_trials
 
 FIXTURES = [
     (entrances, [{'code': 'PK-E1',
@@ -15,6 +16,7 @@ FIXTURES = [
   'ramp': True,
   'tags': ['石阶', '碎石'],
   'condition': '现场见证'},
+ {'code': 'PK-E4', 'park': '柳瓦园', 'ramp': True, 'tags': ['石阶'], 'condition': '现场见证'},
  {'code': 'PK-W1', 'park': '银叶园', 'ramp': True, 'tags': ['木栈道'], 'condition': '暂闭'}]),
     (walk_profiles, [{'code': 'PR-10',
   'park': '柳瓦园',
@@ -31,4 +33,13 @@ FIXTURES = [
   'detour': 'DP-01',
   'legend': '从东侧坡道绕行约 72 米',
   'edition': '2026-11-24a'}]),
+    (weight_trials, [{'code': 'TR-01',
+  'profile': 'PR-10',
+  'weights_b': {'石阶': 1, '碎石': 5},
+  'threshold': 0.7,
+  'state': '试算中'}]),
+    (trial_entries, [{'trial': 'TR-01', 'entrance': 'PK-E1', 'tags': ['石阶', '碎石']},
+ {'trial': 'TR-01', 'entrance': 'PK-E2', 'tags': ['临时标线']},
+ {'trial': 'TR-01', 'entrance': 'PK-E3', 'tags': ['石阶', '碎石']},
+ {'trial': 'TR-01', 'entrance': 'PK-E4', 'tags': ['石阶']}]),
 ]

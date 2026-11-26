@@ -10,6 +10,7 @@
 - 绕行偏好卡 `walk_profiles`，字段为 `park`（公园）、`avoid`（需避开标记）、`weights`（标记权重）、`minimum`（最低匹配分）。模型约束位于 `backend/domain/walk_profiles_model.py`，规则位于 `walk_profiles_service.py`。
 - 绕行线路单 `detours`，字段为 `profile`（偏好卡）、`entrance`（终点入口）、`walk_m`（绕行距离 m）、`score`（匹配分）、`state`（状态）。模型约束位于 `backend/domain/detours_model.py`，规则位于 `detours_service.py`。
 - 导视图签注 `map_notes`，字段为 `detour`（线路单）、`legend`（导视文本）、`edition`（图纸版本）。模型约束位于 `backend/domain/map_notes_model.py`，规则位于 `map_notes_service.py`。
+- 权重对比试算 `weight_trials` / `trial_entries` / `trial_conclusions`，字段为 `profile`（偏好卡）、`weights_b`（候选权重）、`threshold`（放行门槛）、`judgment`（现场判定）、`score_a`/`score_b`（两套分）。模型约束位于 `backend/domain/trials_model.py`，规则位于 `trials_service.py`，续跑打分与结算位于 `trials_scoring.py`。两套权重共用同一批入口留档标记与同一放行门槛；现场判定与两套分都齐了才出结论；评分中断后再提交即可续跑，已算出的分接着用；复核员改判后两套误放行数一起更新，旧结论留在 `trial_conclusions` 可查；改判与算分并发时，晚回的分按新判定结算。
 
 团队为模拟的9 人公园维护班，给小型公园步行图维护无障碍入口信息。
 
@@ -55,6 +56,7 @@ Compose 运行 Nginx、Python FastAPI、独立 Redis 消费进程、SQL 数据�
 | 绕行偏好卡 | `/walk_profiles` /walk_profiles/draft-profile，/walk_profiles/match-entrances | `frontend/src/pages/walk_profiles.js` |
 | 绕行线路单 | `/detours` /detours/submit-detour，/detours/withdraw-detour | `frontend/src/pages/detours.js` |
 | 导视图签注 | `/map_notes` /map_notes/publish-map | `frontend/src/pages/map_notes.js` |
+| 权重对比试算 | `/trials` /trials/draft-trial，/trials/score，/trials/judge-entry，/trials/false-passes，/trials/conclusion-log | `frontend/src/pages/trials.js` |
 
 SQL 实体与约束在 `backend/domain` 下维护。前端使用原生 ES modules。核心算子为 MultiLabelBinarizer + 加权距离。标记以 MultiLabelBinarizer 编为 0/1，匹配分为 1-实际冲突权重/偏好总权重。结果按分值和坡道通行排序。
 

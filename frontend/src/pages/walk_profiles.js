@@ -99,6 +99,26 @@
         "reviewer"
       ],
       "success": "已写入"
+    },
+    {
+      "name": "false_passes",
+      "label": "查询两套权重误放行入口",
+      "path": "/trials/false-passes",
+      "fields": [
+        {
+          "name": "trial",
+          "label": "试算单号",
+          "kind": "text",
+          "initial": "TR-01"
+        }
+      ],
+      "help": "对照现行与候选权重各自错放了哪些走不过的入口。",
+      "roles": [
+        "operator",
+        "reviewer",
+        "viewer"
+      ],
+      "success": "查询完成"
     }
   ]
 };
